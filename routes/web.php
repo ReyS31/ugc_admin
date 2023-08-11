@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DailyActivitiesController;
+use App\Http\Controllers\DailyLogsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/kegiatan/{dailyActivity}', [DailyActivitiesController::class, 'show']);
+Route::get('/pembukuan/{dailyLog}', [DailyLogsController::class, 'show']);

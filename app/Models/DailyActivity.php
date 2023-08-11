@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Image extends Model
+class DailyActivity extends Model
 {
     use HasFactory;
-    public $timestamps = false;
     protected $guarded = [];
 
-    public function imageable(): MorphTo
+    public function images(): MorphMany
     {
-        return $this->morphTo();
+        return $this->morphMany(Image::class, 'imageable');
     }
 }
