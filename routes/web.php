@@ -20,4 +20,9 @@ Route::get('/', function () {
 });
 
 Route::get('/kegiatan/{dailyActivity}', [DailyActivitiesController::class, 'show']);
-Route::get('/pembukuan/{dailyLog}', [DailyLogsController::class, 'show']);
+
+Route::get('/pembukuan', [DailyLogsController::class, 'index'])->name('pembukuan.index');
+Route::get('/pembukuan/add', [DailyLogsController::class, 'create'])->name('pembukuan.create');
+Route::post('/pembukuan/add', [DailyLogsController::class, 'store'])->name('pembukuan.store');
+Route::get('/pembukuan/filter', [DailyLogsController::class, 'filter'])->name('pembukuan.filter');
+Route::get('/pembukuan/{dailyLog}', [DailyLogsController::class, 'show'])->name('pembukuan.show');

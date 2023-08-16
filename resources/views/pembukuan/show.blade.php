@@ -1,24 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layout.print')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Pembukuan - {{ $dailyLog->id }}</title>
-
-    <style>
-        .img {
-            width: 100%;
-        }
-    </style>
-</head>
-
-<body>
+@section('body')
     <table>
         <tr>
             <td>
-                deskripsi
+                Deskripsi
             </td>
             <td>:</td>
             <td>
@@ -27,16 +13,25 @@
         </tr>
         <tr>
             <td>
-                status
+                Tanggal
             </td>
             <td>:</td>
             <td>
-                {{ $dailyLog->money_in ? 'uang masuk' : 'uang keluar' }}
+                {{ $dailyLog->created_at->format('d M Y H:i:s') }}
             </td>
         </tr>
         <tr>
             <td>
-                jumlah
+                Status
+            </td>
+            <td>:</td>
+            <td>
+                {{ $dailyLog->money_in ? 'Uang masuk' : 'Uang keluar' }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Jumlah
             </td>
             <td>:</td>
             <td>
@@ -53,8 +48,14 @@
         </tr>
     </table>
     @foreach ($dailyLog->images as $image)
-        <img src="{{ asset('storage/' . $image->url) }}" class="img">
+        <img src="{{ asset('storage/' . $image->url) }}" class="mx-auto d-block" style="max-width: 75%">
     @endforeach
-</body>
+@endsection
 
-</html>
+@push('script')
+    <script>
+        $(document).ready(function() {
+            window.print();
+        });
+    </script>
+@endpush
