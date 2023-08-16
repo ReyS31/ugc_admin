@@ -19,7 +19,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/kegiatan/{dailyActivity}', [DailyActivitiesController::class, 'show']);
+Route::get('/kegiatan', [DailyActivitiesController::class, 'index'])->name('kegiatan.index');
+Route::get('/kegiatan/add', [DailyActivitiesController::class, 'create'])->name('kegiatan.create');
+Route::post('/kegiatan/add', [DailyActivitiesController::class, 'store'])->name('kegiatan.store');
+Route::get('/kegiatan/filter', [DailyActivitiesController::class, 'filter'])->name('kegiatan.filter');
+Route::get('/kegiatan/{dailyActivity}', [DailyActivitiesController::class, 'show'])->name('kegiatan.show');
 
 Route::get('/pembukuan', [DailyLogsController::class, 'index'])->name('pembukuan.index');
 Route::get('/pembukuan/add', [DailyLogsController::class, 'create'])->name('pembukuan.create');

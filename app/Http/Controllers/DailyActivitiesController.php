@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\DailyActivity;
 use App\Models\Image;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class DailyActivitiesController extends Controller
 {
@@ -22,10 +24,7 @@ class DailyActivitiesController extends Controller
             ]);
 
             if (!$request->has('images')) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'tidak ada gambar'
-                ], 400);
+                throw new Exception("Harus ada bukti", 1);
             }
 
             $data =  DailyActivity::create($validated);
@@ -50,27 +49,36 @@ class DailyActivitiesController extends Controller
             }
 
             DB::commit();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'data disimpan',
-                'data' => $data->toArray(),
-            ], 201);
+            return redirect()->back()->with('status', 'Data tersimpan!');
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
-            return response()->json(
-                [
-                    'status' => 'fail',
-                    'message' => $th->getMessage(),
-                ],
-                400
-            );
+            return redirect()->back()->with('status', 'Data gagal disimpan!, alasan: ' . $th->getMessage());
         }
     }
 
-    
     function show(DailyActivity $dailyActivity)
     {
-        return view('daily_activity', compact('dailyActivity'));
+        return view('kegiatan.show', compact('dailyActivity'));
+    }
+
+    function index(Request $request)
+    {
+        $endDate = Carbon::parse($request->endDate)->addDay();
+        $title = 'Kegiatan';
+        $dAct = DailyActivity::where('created_at', '>', $request->startDate)->where('created_at', '<', $endDate)->get();
+
+        return view('kegiatan.index', compact('dAct', 'request', 'title'));
+    }
+
+    function filter()
+    {
+        return view('filter', ['type' =>
+        'kegiatan']);
+    }
+
+    function create(): View
+    {
+        return view('kegiatan.create');
     }
 }
